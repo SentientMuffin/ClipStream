@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -62,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _setClipboard() async {
-    ClipboardData data = ClipboardData(text: 'Override');
+    ClipboardData data = ClipboardData(text: 'Override $_counter');
     await Clipboard.setData(data);
   }
 
@@ -123,14 +125,24 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _incrementCounter();
-          _getClipboard();
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: Row(
+
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          FloatingActionButton(
+            onPressed: _setClipboard,
+            child: Icon(Icons.arrow_downward_sharp),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              _incrementCounter();
+              _getClipboard();
+            },
+            tooltip: 'Increment',
+            child: Icon(Icons.add),
+          ), // This trailing comma makes auto-formatting nicer for build methods.
+        ]
+      ),
     );
   }
 }
