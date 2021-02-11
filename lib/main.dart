@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.purple,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -73,6 +73,12 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _textValue = data.text;
     });
+  }
+
+  BoxDecoration borderLines() {
+    return BoxDecoration(
+      border: Border.all(),
+    );
   }
 
   @override
@@ -125,24 +131,29 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: Row(
-
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          FloatingActionButton(
-            onPressed: _setClipboard,
-            child: Icon(Icons.arrow_downward_sharp),
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              _incrementCounter();
-              _getClipboard();
-            },
-            tooltip: 'Increment',
-            child: Icon(Icons.add),
-          ), // This trailing comma makes auto-formatting nicer for build methods.
-        ]
+      floatingActionButton: Container(
+        margin: EdgeInsets.only(left: 15, right: 15),
+        // width: MediaQuery.of(context).size.width - 40,
+        // decoration: borderLines(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FloatingActionButton(
+              onPressed: _setClipboard,
+              child: Icon(Icons.arrow_downward_sharp),
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                _incrementCounter();
+                _getClipboard();
+              },
+              tooltip: 'Increment',
+              child: Icon(Icons.add),
+            ),
+          ], // <Widget>[]
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
