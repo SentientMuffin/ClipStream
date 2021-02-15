@@ -2,6 +2,10 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+import 'jsonResponse.dart';
+import 'jsonRequest.dart';
 
 void main() {
   runApp(MyApp());
@@ -61,6 +65,15 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  void _postClip() async {
+    // Temporary hardcoding
+    String url = 'https://pwot5ufm9b.execute-api.us-east-2.amazonaws.com/POC/clips';
+    // new JsonRequest({crudValue='123', })
+    var requestBody = new RequestBody(entryID: "FlutterTest", clipContent: "Testing 123");
+    var jsonRequest = new JsonRequest(crudValue: 'POST', requestValue: requestBody);
+    await post(url, );
   }
 
   void _setClipboard() async {
@@ -143,12 +156,13 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Icon(Icons.arrow_downward_sharp),
             ),
             FloatingActionButton(
-              onPressed: () {
-                _incrementCounter();
-                _getClipboard();
-              },
+              onPressed: _getClipboard,
+              child: Icon(Icons.slideshow_sharp),
+            ),
+            FloatingActionButton(
+              onPressed: _incrementCounter,
               tooltip: 'Increment',
-              child: Icon(Icons.add),
+              child: Icon(Icons.arrow_upward_sharp),
             ),
           ], // <Widget>[]
         ),
