@@ -71,9 +71,15 @@ class _MyHomePageState extends State<MyHomePage> {
     // Temporary hardcoding
     String url = 'https://pwot5ufm9b.execute-api.us-east-2.amazonaws.com/POC/clips';
     // new JsonRequest({crudValue='123', })
-    var requestBody = new RequestBody(entryID: "FlutterTest", clipContent: "Testing 123");
+    var requestBody = new RequestBody(entryID: "Donut", clipContent: "Sprinkles");
     var jsonRequest = new JsonRequest(crudValue: 'POST', requestValue: requestBody);
-    await post(url, );
+
+    final response = await post(url, body: jsonRequest.toJson());
+
+    // Update UI with response message for debugging purposes
+    setState(() {
+      _textValue = response.body;
+    });
   }
 
   void _setClipboard() async {
@@ -156,7 +162,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Icon(Icons.arrow_downward_sharp),
             ),
             FloatingActionButton(
-              onPressed: _getClipboard,
+              onPressed: () {
+                _getClipboard();
+                _postClip();
+              },
               child: Icon(Icons.slideshow_sharp),
             ),
             FloatingActionButton(

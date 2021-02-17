@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:convert';
 
 class JsonRequest {
   static const String CRUD_KEY = 'CRUD';
@@ -14,9 +15,10 @@ class JsonRequest {
 
   JsonRequest({ this.crudValue, this.requestValue });
 
-  void getJSON() {
-
-  }
+  String toJson() => json.encode({
+    CRUD_KEY: this.crudValue,
+    REQUEST_KEY: requestValue.toJson(),
+  });
 }
 
 class RequestBody {
@@ -24,6 +26,10 @@ class RequestBody {
   String clipContent;
 
   RequestBody({ this.entryID, this.clipContent });
+
+  String toJson() => json.encode({
+    this.entryID: this.clipContent
+  });
 
   // RequestBody(String entryID, String clipContent) {
   //   this._entryID = entryID;
