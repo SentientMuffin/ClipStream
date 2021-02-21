@@ -56,6 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String _textValue = '';
 
+  // Temporary hardcoding
+  String _url = 'https://pwot5ufm9b.execute-api.us-east-2.amazonaws.com/POC/clips';
+
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -67,14 +70,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _postClip() async {
-    // Temporary hardcoding
-    String url = 'https://pwot5ufm9b.execute-api.us-east-2.amazonaws.com/POC/clips';
-    // new JsonRequest({crudValue='123', })
-    var requestBody = new RequestBody(entryID: "Donut", clipContent: "Sprinkles");
-    var jsonRequest = new JsonRequest(crudValue: 'POST', requestValue: requestBody);
+  void _getCloudClip() async {
+    var jsonRequest = new GetRequest(crudValue: 'GET', clipId: "Do not");
+    print(jsonRequest.toUri(_url));
+    final response = await get(jsonRequest.toUri(_url));
 
-    final response = await post(url, body: jsonRequest.toJson());
+    setState(() {
+      _textValue = response.body;
+    });
+  }
+
+  void _postCloudClip() async {
+    var jsonRequest = new JsonRequest(crudValue: 'POST', entryID: "Do not", clipContent: "Sprinkle");
+    final response = await post(_url, body: jsonRequest.toJson());
 
     // Update UI with response message for debugging purposes
     setState(() {
@@ -164,12 +172,15 @@ class _MyHomePageState extends State<MyHomePage> {
             FloatingActionButton(
               onPressed: () {
                 _getClipboard();
-                _postClip();
+                _postCloudClip();
               },
               child: Icon(Icons.slideshow_sharp),
             ),
             FloatingActionButton(
-              onPressed: _incrementCounter,
+              onPressed: () {
+                _incrementCounter();
+                _getCloudClip();
+              },
               tooltip: 'Increment',
               child: Icon(Icons.arrow_upward_sharp),
             ),
