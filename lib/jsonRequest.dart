@@ -37,9 +37,24 @@ class GetRequest {
 
   GetRequest({ this.crudValue, this.clipId });
 
-  String toUri(String url) {
-    return url + "?ClipID=\"" + clipId + "\"";
-  }
+  // String toUri(String url) {
+  //   return url + "?ClipID=\"" + clipId + "\"";
+  // }
+
+  String toJson() => json.encode({
+    _StaticConst.CRUD_KEY: this.crudValue,
+    _StaticConst.REQUEST_KEY: {
+      "ClipID": this.clipId,
+    }
+  });
+
+  // Map<String, String> headers() {
+  //   return {
+  //     "httpMethod": "GET",
+  //     "path": "/clips",
+  //     "query": "id1",
+  //   };
+  // }
 }
 
 // class RequestBody {

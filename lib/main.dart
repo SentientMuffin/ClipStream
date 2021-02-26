@@ -72,11 +72,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _getCloudClip() async {
     var jsonRequest = new GetRequest(crudValue: 'GET', clipId: "Do not");
-    print(jsonRequest.toUri(_url));
-    final response = await get(jsonRequest.toUri(_url));
+    final response = await post(_url, body: jsonRequest.toJson());
+
+    // JsonResponse jsonResponse = JsonResponse.fromJson(json.decode(response.body));
+    Map<String, dynamic> responseMap = json.decode(response.body);
 
     setState(() {
-      _textValue = response.body;
+      _textValue = responseMap["Item"]["Content"]["S"];
     });
   }
 
