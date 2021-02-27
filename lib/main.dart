@@ -1,4 +1,5 @@
 import 'dart:ffi';
+// import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -110,6 +111,27 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  EdgeInsets mainFunctionButton() {
+    return EdgeInsets.all(10);
+  }
+
+  Expanded mainButton(onPress, text) {
+    return  Expanded(
+      child: SizedBox (
+        width: double.infinity,
+        child: Padding(
+          padding: mainFunctionButton(),
+          child: ElevatedButton(
+            onPressed: onPress,
+            child: Text(
+              text,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -144,52 +166,62 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Pasting text from clipboard below',
-            ),
-            Text(
-              '$_textValue',
-            ),
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            mainButton(_incrementCounter, 'Current Clipboard: $_textValue'),
+            mainButton(_incrementCounter, 'Pull from cloud'),
+            mainButton(_incrementCounter, 'Push to cloud'),
+            // Text(
+            //   'Pasting text from clipboard below',
+            // ),
+            // Text(
+            //   '$_textValue',
+            // ),
+            // Text(
+            //   'You have pushed the button this many times:',
+            // ),
+            // Text(
+            //   '$_counter',
+            //   style: Theme.of(context).textTheme.headline4,
+            // ),
           ],
         ),
       ),
-      floatingActionButton: Container(
-        margin: EdgeInsets.only(left: 15, right: 15),
-        // width: MediaQuery.of(context).size.width - 40,
-        // decoration: borderLines(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            FloatingActionButton(
-              onPressed: _setClipboard,
-              child: Icon(Icons.arrow_downward_sharp),
-            ),
-            FloatingActionButton(
-              onPressed: () {
-                _getClipboard();
-                _postCloudClip();
-              },
-              child: Icon(Icons.slideshow_sharp),
-            ),
-            FloatingActionButton(
-              onPressed: () {
-                _incrementCounter();
-                _getCloudClip();
-              },
-              tooltip: 'Increment',
-              child: Icon(Icons.arrow_upward_sharp),
-            ),
-          ], // <Widget>[]
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(label: "Option A", icon: Icon(Icons.arrow_downward_sharp)),
+          BottomNavigationBarItem(label: "Option B", icon: Icon(Icons.arrow_downward_sharp)),
+          BottomNavigationBarItem(label: "Option C", icon: Icon(Icons.arrow_downward_sharp)),
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: Container(
+      //   margin: EdgeInsets.only(left: 15, right: 15),
+      //   // width: MediaQuery.of(context).size.width - 40,
+      //   // decoration: borderLines(),
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //     children: [
+      //       FloatingActionButton(
+      //         onPressed: _setClipboard,
+      //         child: Icon(Icons.arrow_downward_sharp),
+      //       ),
+      //       FloatingActionButton(
+      //         onPressed: () {
+      //           _getClipboard();
+      //           _postCloudClip();
+      //         },
+      //         child: Icon(Icons.slideshow_sharp),
+      //       ),
+      //       FloatingActionButton(
+      //         onPressed: () {
+      //           _incrementCounter();
+      //           _getCloudClip();
+      //         },
+      //         tooltip: 'Increment',
+      //         child: Icon(Icons.arrow_upward_sharp),
+      //       ),
+      //     ], // <Widget>[]
+      //   ),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
