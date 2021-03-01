@@ -54,54 +54,54 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String _textValue = '';
+  String _clipBoardValue = '', _cloudPushStatus = '', _cloudPullStatus = '';
 
   // Temporary hardcoding
   String _url = 'https://pwot5ufm9b.execute-api.us-east-2.amazonaws.com/POC/clips';
 
-  void _incrementCounter() {
+  void clearOnScreenStatus() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _clipBoardValue = '';
+      _cloudPushStatus = '';
+      _cloudPullStatus = '';
     });
   }
 
-  void _getCloudClip() async {
-    var jsonRequest = new GetRequest(crudValue: 'GET', clipId: "Do not");
+  void _pullCloudClip() async {
+    var jsonRequest = new GetRequest(crudValue: 'GET', clipID: "WIP_MobilePhone");
     final response = await post(_url, body: jsonRequest.toJson());
 
     // JsonResponse jsonResponse = JsonResponse.fromJson(json.decode(response.body));
     Map<String, dynamic> responseMap = json.decode(response.body);
+    _setClipboard(responseMap["Item"]["Content"]["S"]);
 
     setState(() {
-      _textValue = responseMap["Item"]["Content"]["S"];
+      _cloudPullStatus = "\nContent pulled from cloud.";
     });
   }
 
   void _postCloudClip() async {
-    var jsonRequest = new JsonRequest(crudValue: 'POST', entryID: "Do not", clipContent: "Sprinkle");
+    String localClipBoardContent = _clipBoardValue.isEmpty ?
+      (await Clipboard.getData(Clipboard.kTextPlain)).text : _clipBoardValue;
+
+    var jsonRequest = new JsonRequest(crudValue: 'POST', clipID: "WIP_MobilePhone", clipContent: _clipBoardValue);
     final response = await post(_url, body: jsonRequest.toJson());
 
     // Update UI with response message for debugging purposes
     setState(() {
-      _textValue = response.body;
+      _cloudPushStatus = response.body;
     });
   }
 
-  void _setClipboard() async {
-    ClipboardData data = ClipboardData(text: 'Override $_counter');
+  void _setClipboard(String value) async {
+    ClipboardData data = ClipboardData(text: value);
     await Clipboard.setData(data);
   }
 
   void _getClipboard() async {
     ClipboardData data = await Clipboard.getData(Clipboard.kTextPlain);
     setState(() {
-      _textValue = data.text;
+      _clipBoardValue = data.text;
     });
   }
 
@@ -134,54 +134,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            mainButton(_incrementCounter, 'Current Clipboard: $_textValue'),
-            mainButton(_incrementCounter, 'Pull from cloud'),
-            mainButton(_incrementCounter, 'Push to cloud'),
-            // Text(
-            //   'Pasting text from clipboard below',
-            // ),
-            // Text(
-            //   '$_textValue',
-            // ),
-            // Text(
-            //   'You have pushed the button this many times:',
-            // ),
-            // Text(
-            //   '$_counter',
-            //   style: Theme.of(context).textTheme.headline4,
-            // ),
+            mainButton(_getClipboard, 'Current Clipboard: (Click To Update)\n$_clipBoardValue'),
+            mainButton(_pullCloudClip, 'Pull from cloud$_cloudPullStatus'),
+            mainButton(_postCloudClip, 'Push to cloud$_cloudPushStatus'),
           ],
         ),
       ),
@@ -192,36 +155,6 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(label: "Option C", icon: Icon(Icons.arrow_downward_sharp)),
         ],
       ),
-      // floatingActionButton: Container(
-      //   margin: EdgeInsets.only(left: 15, right: 15),
-      //   // width: MediaQuery.of(context).size.width - 40,
-      //   // decoration: borderLines(),
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //     children: [
-      //       FloatingActionButton(
-      //         onPressed: _setClipboard,
-      //         child: Icon(Icons.arrow_downward_sharp),
-      //       ),
-      //       FloatingActionButton(
-      //         onPressed: () {
-      //           _getClipboard();
-      //           _postCloudClip();
-      //         },
-      //         child: Icon(Icons.slideshow_sharp),
-      //       ),
-      //       FloatingActionButton(
-      //         onPressed: () {
-      //           _incrementCounter();
-      //           _getCloudClip();
-      //         },
-      //         tooltip: 'Increment',
-      //         child: Icon(Icons.arrow_upward_sharp),
-      //       ),
-      //     ], // <Widget>[]
-      //   ),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

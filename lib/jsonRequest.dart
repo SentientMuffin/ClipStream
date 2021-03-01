@@ -8,7 +8,7 @@ class _StaticConst {
 
 class JsonRequest {
   String crudValue;
-  String entryID;
+  String clipID;
   String clipContent;
   // RequestBody requestValue;
 
@@ -17,12 +17,12 @@ class JsonRequest {
   //   this.requestValue = requestBody;
   // }
 
-  JsonRequest({ this.crudValue, this.entryID, this.clipContent });
+  JsonRequest({ this.crudValue, this.clipID, this.clipContent });
 
   String toJson() => json.encode({
     _StaticConst.CRUD_KEY: this.crudValue,
     _StaticConst.REQUEST_KEY: {
-      this.entryID: this.clipContent,
+      this.clipID: this.clipContent,
     },
   });
 
@@ -33,9 +33,9 @@ class JsonRequest {
 
 class GetRequest {
   String crudValue;
-  String clipId;
+  String clipID;
 
-  GetRequest({ this.crudValue, this.clipId });
+  GetRequest({ this.crudValue, this.clipID });
 
   // String toUri(String url) {
   //   return url + "?ClipID=\"" + clipId + "\"";
@@ -44,7 +44,7 @@ class GetRequest {
   String toJson() => json.encode({
     _StaticConst.CRUD_KEY: this.crudValue,
     _StaticConst.REQUEST_KEY: {
-      "ClipID": this.clipId,
+      "ClipID": this.clipID,
     }
   });
 
